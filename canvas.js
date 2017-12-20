@@ -9,7 +9,7 @@ var s = 0;
 
 window.onload = function() {
     var pad = new Paddle("#FFFFFF",mouseX,canvas.height,canvas.width/10,canvas.height/20);
-    var bal = new Ball("FFFFFF",xpos, ypos, canvas.width/30);
+    var bal = new Ball("FFFFFF",xpos, ypos, canvas.width/30,pad.l,pad.h);
     canvas.addEventListener("click", Run);
     canvas.addEventListener('mousemove', reportMousePos, true);
     function reportMousePos(e) {
@@ -28,7 +28,7 @@ window.onload = function() {
 }
 
 function Run(){
-  while (bal.isAlive) {
+  if (bal.isAlive) {
     Canvas();
   }
   window.cancelRequestAnimationFrame(Canvas);
@@ -40,16 +40,16 @@ function Paddle(c,x,y,l,h){
 	this.y = canvas.height;
 	this.drawPaddle = function(){
 	fillStyle = this.c;
-	fillRect(this.x,this.y,this.l,this.h);
+	fillRect(this.x + this.l/2,this.y - this.h/2,this.l,this.h);
  }
 }
 
-function Ball(c,x,y,s){
+function Ball(c,x,y,s,pl,ph){
 	this.c = c; this.x = x; this.y = y; this.s = s; this.pl = pl; this.ph = ph;
 
 	this.drawBall = function(){
-    ctx.fillStyle = this.c;
-    ctx.fillRect(this.x,this.y,this.s,this.s);
+    		ctx.fillStyle = this.c;
+    		ctx.fillRect(this.x,this.y,this.s,this.s);
 	}
 
 	this.isAlive = function(){return(this.y<canvas.height)};
@@ -62,6 +62,7 @@ function Ball(c,x,y,s){
 		if ((this.x >= mouseX - this.pl/2) && (this.x <= mouseX + this.pl/2)){
 			if ((this.y >=  canvas.height - this.ph) && (this.y <= canvas.height)){
 				yvel *= -1;
+				s++;
 		}
 	}
 		if (this.y <= 0){yvel *= -1};
