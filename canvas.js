@@ -39,9 +39,8 @@ function Paddle(c,x,y,l,h){
 	this.x = mouseX;
 	this.y = canvas.height;
 	this.drawPaddle = function(){
-	rectMode(CENTER);
-	fill(this.c);
-	rect(this.x,this.y,this.l,this.h);
+	fillStyle = this.c;
+	fillRect(this.x,this.y,this.l,this.h);
  }
 }
 
@@ -71,13 +70,12 @@ function Ball(c,x,y,s){
 
 function Canvas() {
     window.requestAnimationFrame(Canvas);
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "16px Arial";
-    ctx.fillStyle = "#ff0000";
-    ctx.fillText("Score: "+s, 8, 20);
-    bal.drawBall();
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect();
-    bal.play(3,3);
+    	ctx.fillStyle = "#000000";
+    	ctx.fillRect(0, 0, canvas.width, canvas.height);
+    	ctx.font = "16px Arial";
+    	ctx.fillStyle = "#ff0000";
+    	ctx.fillText("Score: "+s, 8, 20);
+	pad.drawPaddle();
+	bal.drawBall();
+    	bal.play(3,3);
 }
