@@ -1,46 +1,28 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext('2d');
+var s = 0;
+var pad = new Paddle("#FFFFFF",mouseX,canvas.height,canvas.width/10,canvas.height/20);
+var bal = new Ball("FFFFFF",xpos, ypos, canvas.width/100,pad.l,pad.h);
 var mouseX;
+console.log(mouseX);
 var xpos = Math.floor(Math.random() * canvas.width);
 var ypos = Math.floor(Math.random() * canvas.height/4);
 var xvel = 4;
 var yvel = 5;
-var s = 0;
 
 window.onload = function() {
-    var pad = new Paddle("#FFFFFF",mouseX,canvas.height,canvas.width/10,canvas.height/20);
-    var bal = new Ball("FFFFFF",xpos, ypos, canvas.width/30,pad.l,pad.h);
-    canvas.addEventListener("click", Run);
-    canvas.addEventListener('mousemove', reportMousePos, true);
-    function reportMousePos(e) {
-        mousePos = getMousePos(canvas, e);
-        mouseX = mousePos.x;
-        mouseY = mousePos.y;
-        var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-    }
-    function getMousePos(canvas, e) {
-        rect = canvas.getBoundingClientRect();
-        return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
-        };
-    }
+  canvas.addEventListener("click", Canvas);
+  canvas.addEventListener('mousemove', reportMousePos, true);
 }
 
-function Run(){
-  if (bal.isAlive) {
-    Canvas();
-  }
-  window.cancelRequestAnimationFrame(Canvas);
-}
+
 
 function Paddle(c,x,y,l,h){
-	this.c = c; this.l = l; this.h = h;
-	this.x = mouseX;
-	this.y = canvas.height;
+	this.c = c;this.x = x;this.y = y;this.l = l;this.h = h;
 	this.drawPaddle = function(){
-	fillStyle = this.c;
-	fillRect(this.x + this.l/2,this.y - this.h/2,this.l,this.h);
+	ctx.fillStyle = this.c;
+	ctx.fillRect(this.x + this.l/2,this.y - this.h/2,this.l,this.h);
+  // console.log(this.x+this.l/2);
  }
 }
 
@@ -73,10 +55,26 @@ function Canvas() {
     window.requestAnimationFrame(Canvas);
     	ctx.fillStyle = "#000000";
     	ctx.fillRect(0, 0, canvas.width, canvas.height);
-    	ctx.font = "16px Arial";
+    	ctx.font = "8px Arial";
     	ctx.fillStyle = "#ff0000";
     	ctx.fillText("Score: "+s, 8, 20);
-	pad.drawPaddle();
-	bal.drawBall();
+	    pad.drawPaddle();
+	    bal.drawBall();
     	bal.play(3,3);
+}
+
+function reportMousePos(e) {
+    mousePos = getMousePos(canvas, e);
+    mouseX = mousePos.x;
+    mouseY = mousePos.y;
+    var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
+    return(mouseX);
+    // console.log(message);
+}
+function getMousePos(canvas, e) {
+    rect = canvas.getBoundingClientRect();
+    return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
 }
