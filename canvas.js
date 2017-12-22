@@ -53,10 +53,9 @@ function Ball(c,x,y,s,pl,ph){
 }
 
 function Canvas() {
+  window.requestAnimationFrame(Canvas);
     var pad = new Paddle("#FFFFFF",mouseX,canvas.height,canvas.width/10,canvas.height/20);
-    var bal = new Ball("FFFFFF",xpos, ypos, canvas.width/100,pad.l,pad.h);
-    console.log(mouseX);
-    window.requestAnimationFrame(Canvas);
+    var bal = new Ball("#FFFFFF",xpos, ypos, canvas.width/100,pad.l,pad.h);
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = "8px Arial";
@@ -72,7 +71,6 @@ function reportMousePos(e) {
     mouseX = mousePos.x;
     mouseY = mousePos.y;
     var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-    // console.log(message);
 }
 
 //define a helper function to do the "heavy lifting" of calculating the mouse coordinates
