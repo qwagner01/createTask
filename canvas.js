@@ -8,12 +8,10 @@ var yvel = 5;
 var mouseX;
 var mouseY;
 
-
 window.onload = function() {
   canvas.addEventListener("click", Canvas);
   canvas.addEventListener('mousemove', reportMousePos, false);
 }
-
 
 function Paddle(c,x,y,l,h){
 	this.c = c;this.l = l;this.h = h;
@@ -43,7 +41,7 @@ function Ball(c,x,y,s,pl,ph){
 		if (this.x >= canvas.width){xvel *= -1;};
 		if (this.x <= 0){xvel *= -1};
 		if ((this.x >= mouseX - this.pl/2) && (this.x <= mouseX + this.pl/2)){
-			if ((this.y >=  canvas.height - this.ph) && (this.y <= canvas.height)){
+			if ((this.y >= canvas.height - this.ph) && (this.y <= canvas.height)){
 				yvel *= -1;
 				s++;
 		}
@@ -55,15 +53,15 @@ function Ball(c,x,y,s,pl,ph){
 function Canvas() {
   window.requestAnimationFrame(Canvas);
     var pad = new Paddle("#FFFFFF",mouseX,canvas.height,canvas.width/10,canvas.height/20);
-    var bal = new Ball("#FFFFFF",xpos, ypos, canvas.width/100,pad.l,pad.h);
+    var bal = new Ball("#FFFFFF",xpos, ypos, canvas.width/80,pad.l,pad.h);
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = "8px Arial";
     ctx.fillStyle = "#ff0000";
-    ctx.fillText("Score: "+s, 8, 20);
+    ctx.fillText("Score: "+s, canvas.width/20, canvas.height/12);
 	  pad.drawPaddle();
 	  bal.drawBall();
-    bal.play(3,3);
+    bal.play(xvel,yvel);
 }
 
 function reportMousePos(e) {
@@ -71,13 +69,18 @@ function reportMousePos(e) {
     mouseX = mousePos.x;
     mouseY = mousePos.y;
     var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
+    // console.log(message);
+
 }
 
 //define a helper function to do the "heavy lifting" of calculating the mouse coordinates
 function getMousePos(canvas, e) {
-    rect = canvas.getBoundingClientRect();
-    return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-    };
- };
+  var rect = canvas.getBoundingClientRect(), // abs. size of element
+    scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for X
+    scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for Y
+
+return {
+  x: (e.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
+  y: (e.clientY - rect.top) * scaleY     // been adjusted to be relative to element
+}
+}
