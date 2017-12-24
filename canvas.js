@@ -2,7 +2,7 @@ var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext('2d');
 var score = 0;
 var xpos = Math.floor(Math.random() * canvas.width);
-var ypos = canvas.height/10;
+var ypos = Math.floor(Math.random() * canvas.height/4);
 var right = 1.2; var down = 1; var left = -1.2; var up = -1;
 var xvel = right; var yvel = down;
 var mouseX; var mouseY;
@@ -46,6 +46,7 @@ function move(){
   xpos += xvel; ypos += yvel;
   down += .001; up -= .001;
   right += .001; left -= .001;
+  score++;
 }
 
 function gameEnd(){
@@ -82,7 +83,6 @@ function Ball(c,x,y,s,pl,ph){
 			if ((this.y > canvas.height - this.ph) && (this.y < canvas.height)){
 				yvel = up;
         blip.play();
-				score++;
 		}
 	 }
 		if (this.y <= 0){yvel = down; blop.play();};
