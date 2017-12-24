@@ -55,7 +55,7 @@ function gameEnd(){
   if(!alert("GAME OVER, Your Score Was: " +score)){window.location.reload();}
 }
 
-function Paddle(c,x,y,l,h){
+function Paddle(c,x,y,l,h){ //function for making paddle object
 	this.c = c;this.l = l;this.h = h;
   this.x = x - this.l/2;
   this.y = y - this.h/2;
@@ -66,7 +66,7 @@ function Paddle(c,x,y,l,h){
  }
 }
 
-function Ball(c,x,y,s,pl,ph){
+function Ball(c,x,y,s,pl,ph){ //function for making ball object
 	this.c = c; this.s = s; this.pl = pl; this.ph = ph;
   this.x = x - this.s/2;
   this.y = y - this.s/2;
@@ -75,17 +75,17 @@ function Ball(c,x,y,s,pl,ph){
     ctx.fillStyle = this.c;
     ctx.fillRect(this.x,this.y,this.s,this.s);
 	}
-	this.isAlive = this.y<canvas.height;
+	this.isAlive = this.y - this.s/2 < canvas.height;
 	this.play = function(){
-		if (this.x >= canvas.width - this.s){xvel = left; blop.play();}
-    if (this.x <= 0 + this.s){xvel = right; blop.play();}
-		if ((this.x > mouseX - this.pl/2) && (this.x < mouseX + this.pl/2)){
-			if ((this.y > canvas.height - this.ph) && (this.y < canvas.height)){
+		if (this.x + this.s/2 >= canvas.width - this.s){xvel = left; blop.play();}
+    if (this.x - this.s/2 <= 0){xvel = right; blop.play();}
+		if ((this.x + this.s/2 >= mouseX - this.pl/2) && (this.x - this.s/2 <= mouseX + this.pl/2)){
+			if ((this.y + this.s/2 >= canvas.height - this.ph) && (this.y - this.s/2 <= canvas.height)){
 				yvel = up;
         blip.play();
 		}
 	 }
-		if (this.y <= 0){yvel = down; blop.play();};
+		if (this.y - this.s/2 <= 0){yvel = down; blop.play();};
 	}
 }
 
@@ -93,9 +93,6 @@ function reportMousePos(e) {
     mousePos = getMousePos(canvas, e); //give the heavy lifting to another function
     mouseX = mousePos.x;
     mouseY = mousePos.y;
-    var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-    // console.log(message);
-
 }
 
 //define a helper function to do the "heavy lifting" of calculating the mouse coordinates
@@ -103,14 +100,13 @@ function getMousePos(canvas, e) {
   var rect = canvas.getBoundingClientRect(), // abs. size of element
     scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for X
     scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for Y
-
 return {
   x: (e.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
   y: (e.clientY - rect.top) * scaleY     // been adjusted to be relative to element
  }
 }
 
-function sound(src) {
+function sound(src) { //function for making audio objects
     this.sound = document.createElement("audio");
     this.sound.src = src;
     this.sound.setAttribute("preload", "auto");
