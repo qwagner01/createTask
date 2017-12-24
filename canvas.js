@@ -2,15 +2,57 @@ var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext('2d');
 var score = 0;
 var xpos = Math.floor(Math.random() * canvas.width);
-var ypos = Math.floor(Math.random() * canvas.height/4);
+var ypos = canvas.height/10;
 var right = 1; var down = 1; var left = -1; var up = -1;
 var xvel = right; var yvel = down;
 var mouseX; var mouseY;
 
+
 window.onload = function() {
-  // loadScreen();
+  ctx.font = "12px Arial";
+  ctx.fillStyle = "#ff0000";
+  ctx.fillText("Click to Start", canvas.width/2.5, canvas.height/2);
   canvas.addEventListener("click", Canvas);
   canvas.addEventListener('mousemove', reportMousePos, false);
+}
+
+// function Canvas(){
+//   console.log("this should work");
+//   ctx.fillStyle = "#000000";
+//   ctx.fillRect(0, 0, canvas.width, canvas.height);
+//   ctx.font = "8px Arial";
+//   ctx.fillStyle = "#ff0000";
+//   ctx.fillText("Click to Start", window.width/2, window.height/2);
+// }
+
+
+function Canvas() {
+  window.requestAnimationFrame(Canvas);
+    var pad = new Paddle("#FFFFFF",mouseX,canvas.height,canvas.width/10,canvas.height/20);
+    var bal = new Ball("#FFFFFF",xpos, ypos, canvas.width/80,pad.l,pad.h);
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "8px Arial";
+    ctx.fillStyle = "#ff0000";
+    ctx.fillText("Score: "+score, canvas.width/20, canvas.height/12);
+	  pad.drawPaddle();
+	  bal.drawBall();
+    move();
+    bal.play();
+    if(!bal.isAlive){
+      gameOver();
+    }
+}
+
+function move(){
+  xpos += xvel; ypos += yvel;
+  down += .001; up -= .001;
+  right += .001; left -= .001;
+}
+
+function gameOver(){
+  window.cancelAnimationFrame(Canvas);
+  if(!alert("GAME OVER, Your Score Was: " +score)){window.location.reload();}
 }
 
 function Paddle(c,x,y,l,h){
@@ -47,32 +89,6 @@ function Ball(c,x,y,s,pl,ph){
 	}
 }
 
-function move(){
-  xpos += xvel; ypos += yvel;
-  down += .001; up -= .001;
-  right += .001; left -= .001;
-}
-
-function Canvas() {
-  window.requestAnimationFrame(Canvas);
-    var pad = new Paddle("#FFFFFF",mouseX,canvas.height,canvas.width/10,canvas.height/20);
-    var bal = new Ball("#FFFFFF",xpos, ypos, canvas.width/80,pad.l,pad.h);
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "8px Arial";
-    ctx.fillStyle = "#ff0000";
-    ctx.fillText("Score: "+score, canvas.width/20, canvas.height/12);
-	  pad.drawPaddle();
-	  bal.drawBall();
-    move();
-    bal.play();
-
-
-    if(!bal.isAlive){
-      window.cancelAnimationFrame(Canvas);
-    }
-}
-
 function reportMousePos(e) {
     mousePos = getMousePos(canvas, e); //give the heavy lifting to another function
     mouseX = mousePos.x;
@@ -94,10 +110,17 @@ return {
  }
 }
 
-function loadScreen(){
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "8px Arial";
-  ctx.fillStyle = "#000000";
-  ctx.fillText("Click to Start", window.width/2, window.height/2);
+function Sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }
 }
