@@ -3,9 +3,10 @@ var ctx = canvas.getContext('2d');
 var score = 0;
 var xpos = Math.floor(Math.random() * canvas.width);
 var ypos = canvas.height/10;
-var right = 1; var down = 1; var left = -1; var up = -1;
+var right = 1; var down = 1.1; var left = -1.2; var up = -1.3;
 var xvel = right; var yvel = down;
 var mouseX; var mouseY;
+var blip = new sound("blip.wav");
 
 
 window.onload = function() {
@@ -15,16 +16,6 @@ window.onload = function() {
   canvas.addEventListener("click", Canvas);
   canvas.addEventListener('mousemove', reportMousePos, false);
 }
-
-// function Canvas(){
-//   console.log("this should work");
-//   ctx.fillStyle = "#000000";
-//   ctx.fillRect(0, 0, canvas.width, canvas.height);
-//   ctx.font = "8px Arial";
-//   ctx.fillStyle = "#ff0000";
-//   ctx.fillText("Click to Start", window.width/2, window.height/2);
-// }
-
 
 function Canvas() {
   window.requestAnimationFrame(Canvas);
@@ -77,15 +68,16 @@ function Ball(c,x,y,s,pl,ph){
 	}
 	this.isAlive = this.y<canvas.height;
 	this.play = function(){
-		if (this.x >= canvas.width - this.s){xvel = left}
-    if (this.x <= 0 + this.s){xvel = right}
+		if (this.x >= canvas.width - this.s){xvel = left; blip.play();}
+    if (this.x <= 0 + this.s){xvel = right; blip.play();}
 		if ((this.x > mouseX - this.pl/2) && (this.x < mouseX + this.pl/2)){
 			if ((this.y > canvas.height - this.ph) && (this.y < canvas.height)){
 				yvel = up;
+        blip.play();
 				score++;
 		}
 	 }
-		if (this.y <= 0){yvel = down};
+		if (this.y <= 0){yvel = down; blip.play();};
 	}
 }
 
@@ -110,7 +102,7 @@ return {
  }
 }
 
-function Sound(src) {
+function sound(src) {
     this.sound = document.createElement("audio");
     this.sound.src = src;
     this.sound.setAttribute("preload", "auto");
