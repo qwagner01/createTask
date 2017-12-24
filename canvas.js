@@ -1,12 +1,11 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext('2d');
-var s = 0;
+var score = 0;
 var xpos = Math.floor(Math.random() * canvas.width);
 var ypos = Math.floor(Math.random() * canvas.height/4);
-var xvel = 2;
-var yvel = 2;
-var mouseX;
-var mouseY;
+var right = 1; var down = 1; var left = -1; var up = -1;
+var xvel = right; var yvel = down;
+var mouseX; var mouseY;
 
 window.onload = function() {
   // loadScreen();
@@ -36,20 +35,22 @@ function Ball(c,x,y,s,pl,ph){
 	}
 	this.isAlive = this.y<canvas.height;
 	this.play = function(){
-		if ((this.x >= canvas.width - this.s) || (this.x <= 0 + this.s)){xvel *= -1;};
+		if (this.x >= canvas.width - this.s){xvel = left}
+    if (this.x <= 0 + this.s){xvel = right}
 		if ((this.x > mouseX - this.pl/2) && (this.x < mouseX + this.pl/2)){
 			if ((this.y > canvas.height - this.ph) && (this.y < canvas.height)){
-				yvel *= -1;
-				s++;
+				yvel = up;
+				score++;
 		}
 	 }
-		if (this.y <= 0){yvel *= -1};
+		if (this.y <= 0){yvel = down};
 	}
 }
 
 function move(){
   xpos += xvel; ypos += yvel;
-  xvel += .001; yvel += .001;
+  down += .001; up -= .001;
+  right += .001; left -= .001;
 }
 
 function Canvas() {
@@ -60,7 +61,7 @@ function Canvas() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = "8px Arial";
     ctx.fillStyle = "#ff0000";
-    ctx.fillText("Score: "+s, canvas.width/20, canvas.height/12);
+    ctx.fillText("Score: "+score, canvas.width/20, canvas.height/12);
 	  pad.drawPaddle();
 	  bal.drawBall();
     move();
