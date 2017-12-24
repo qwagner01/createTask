@@ -3,18 +3,25 @@ var ctx = canvas.getContext('2d');
 var score = 0;
 var xpos = Math.floor(Math.random() * canvas.width);
 var ypos = canvas.height/10;
-var right = 1; var down = 1.1; var left = -1.2; var up = -1.3;
+var right = 1.2; var down = 1; var left = -1.2; var up = -1;
 var xvel = right; var yvel = down;
 var mouseX; var mouseY;
 var blip = new sound("blip.wav");
-
+var blop = new sound("blop.wav");
+var gameOver = new sound("gameOver.wav");
+var gameStart = new sound("gameStart.wav");
 
 window.onload = function() {
   ctx.font = "12px Arial";
   ctx.fillStyle = "#ff0000";
   ctx.fillText("Click to Start", canvas.width/2.5, canvas.height/2);
-  canvas.addEventListener("click", Canvas);
+  canvas.addEventListener("click", startGame);
   canvas.addEventListener('mousemove', reportMousePos, false);
+}
+
+function startGame(){
+  gameStart.play();
+  Canvas();
 }
 
 function Canvas() {
@@ -31,7 +38,7 @@ function Canvas() {
     move();
     bal.play();
     if(!bal.isAlive){
-      gameOver();
+      gameEnd();
     }
 }
 
@@ -41,8 +48,9 @@ function move(){
   right += .001; left -= .001;
 }
 
-function gameOver(){
+function gameEnd(){
   window.cancelAnimationFrame(Canvas);
+  gameOver.play();
   if(!alert("GAME OVER, Your Score Was: " +score)){window.location.reload();}
 }
 
@@ -68,8 +76,8 @@ function Ball(c,x,y,s,pl,ph){
 	}
 	this.isAlive = this.y<canvas.height;
 	this.play = function(){
-		if (this.x >= canvas.width - this.s){xvel = left; blip.play();}
-    if (this.x <= 0 + this.s){xvel = right; blip.play();}
+		if (this.x >= canvas.width - this.s){xvel = left; blop.play();}
+    if (this.x <= 0 + this.s){xvel = right; blop.play();}
 		if ((this.x > mouseX - this.pl/2) && (this.x < mouseX + this.pl/2)){
 			if ((this.y > canvas.height - this.ph) && (this.y < canvas.height)){
 				yvel = up;
@@ -77,7 +85,7 @@ function Ball(c,x,y,s,pl,ph){
 				score++;
 		}
 	 }
-		if (this.y <= 0){yvel = down; blip.play();};
+		if (this.y <= 0){yvel = down; blop.play();};
 	}
 }
 
