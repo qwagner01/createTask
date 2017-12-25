@@ -12,6 +12,7 @@ var gameOver = new sound("gameOver.wav");
 var gameStart = new sound("gameStart.wav");
 
 window.onload = function() {
+  console.log("foo");
   ctx.font = "12px Arial";
   ctx.fillStyle = "#ff0000";
   ctx.fillText("Click to Start", canvas.width/2.5, canvas.height/2);
