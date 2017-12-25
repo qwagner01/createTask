@@ -1,6 +1,6 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext('2d');
-var score = 0;
+var tempScore = 0; var score; var finalScore;
 var xpos = Math.floor(Math.random() * canvas.width);
 var ypos = Math.floor(Math.random() * canvas.height/4);
 var right = 1.2; var down = 1; var left = -1.2; var up = -1;
@@ -32,10 +32,12 @@ function Canvas() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = "8px Arial";
     ctx.fillStyle = "#ff0000";
-    ctx.fillText("Score: "+score, canvas.width/20, canvas.height/12);
+    ctx.fillText("Score: "+ finalScore, canvas.width/20, canvas.height/12);
 	  pad.drawPaddle();
 	  bal.drawBall();
     move();
+    score = tempScore/10;
+    finalScore = score.toFixed(0);
     bal.play();
     if(!bal.isAlive){
       gameEnd();
@@ -46,13 +48,13 @@ function move(){
   xpos += xvel; ypos += yvel;
   down += .001; up -= .001;
   right += .001; left -= .001;
-  score++;
+  tempScore++;
 }
 
 function gameEnd(){
   window.cancelAnimationFrame(Canvas);
   gameOver.play();
-  if(!alert("GAME OVER, Your Score Was: " +score)){window.location.reload();}
+  if(!alert("GAME OVER, Your Score Was: " + finalScore)){window.location.reload();}
 }
 
 function Paddle(c,x,y,l,h){ //function for making paddle object
