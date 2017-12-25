@@ -55,7 +55,9 @@ function move(){
 function gameEnd(){
   window.cancelAnimationFrame(Canvas);
   gameOver.play();
-  if(!alert("GAME OVER, Your Score Was: " + finalScore)){window.location.reload();}
+  // if(!alert("GAME OVER, Your Score Was: " + finalScore)){window.location.reload();}
+  alert("GAME OVER, Your Score Was: " + finalScore);
+  window.location.reload()
 }
 
 function Paddle(c,x,y,l,h){ //function for making paddle object
