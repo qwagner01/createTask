@@ -35,6 +35,7 @@ function init() {
 function startGame() {
   gameStart.play();
   run = setInterval(Canvas, 10);
+  canvas.removeEventListener("click", startGame);
 }
 
 function Canvas() {
